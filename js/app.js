@@ -1100,6 +1100,12 @@ function renderGroceries() {
     }
     checkBox.onclick = () => toggleCheck(index);
     actionArea.appendChild(checkBox);
+    
+    const delBtn = document.createElement('button');
+    delBtn.className = 'text-on-surface-variant/50 hover:text-primary active:scale-90 transition-transform ml-1';
+    delBtn.innerHTML = '<span class="material-symbols-outlined text-[14px]">delete</span>';
+    delBtn.onclick = () => deleteGrocery(index);
+    actionArea.appendChild(delBtn);
 
     topRow.appendChild(nameSpan);
     topRow.appendChild(actionArea);
@@ -1236,9 +1242,17 @@ function closeFab() {
 let timerSeconds = 300;
 let timerRunning = false;
 let timerInterval = null;
-const TOTAL = 300; // 5 Minutes
+let TOTAL = 300; // Default 5 Minutes
 
 function openFocus() {
+  const minInput = document.getElementById('focus-input-minutes');
+  if (minInput && minInput.value) {
+    TOTAL = parseInt(minInput.value) * 60;
+  } else {
+    TOTAL = 25 * 60;
+  }
+  timerSeconds = TOTAL;
+  renderTimer();
   const overlay = document.getElementById('focus-overlay');
   if (overlay) {
     overlay.classList.remove('hidden');
@@ -1614,3 +1628,41 @@ document.addEventListener('DOMContentLoaded', () => {
   // Update Clock every second
   setInterval(updateClock, 1000);
 });
+
+
+// ===== MOOD LOGGING =====
+function openMoodModal() {
+  openModal('mood-modal');
+}
+
+function submitMoodLog() {
+  const radios = document.getElementsByName('mood-radio');
+  let selectedMood = 'Calm';
+  for (let r of radios) {
+    if (r.checked) { selectedMood = r.value; break; }
+  }
+  const note = document.getElementById('mood-input-note').value;
+  
+  const dateStr = getLocalDateString(calendarSelectedDate || selectedDate || new Date());
+  
+  moodByDate[dateStr] = { mood: selectedMood, note: note };
+  localStorage.setItem('cm-moods', JSON.stringify(moodByDate));
+  
+  closeModal('mood-modal');
+  renderCalendar();
+  if (document.getElementById('calendar-modal').classList.contains('open')) {
+    renderCalendarAgenda(calendarSelectedDate);
+  }
+  renderMoodGarden();
+}
+
+
+// ===== DELETE FUNCTIONS =====
+function deleteBill(index) { bills.splice(index, 1); localStorage.setItem('cm-bills', JSON.stringify(bills)); renderBillsAndSubscriptions(); }
+function deleteDebt(index) { debts.splice(index, 1); localStorage.setItem('cm-debts', JSON.stringify(debts)); renderDebts(); }
+function deleteSplurge(index) { splurges.splice(index, 1); localStorage.setItem('cm-splurges', JSON.stringify(splurges)); renderSplurges(); }
+function deleteRhythm(index) { rhythms.splice(index, 1); localStorage.setItem('cm-rhythms', JSON.stringify(rhythms)); renderRhythms(); }
+function deleteExpiry(index) { expiries.splice(index, 1); localStorage.setItem('cm-expiries', JSON.stringify(expiries)); renderExpiries(); }
+function deleteEssential(index) { essentials.splice(index, 1); localStorage.setItem('cm-essentials', JSON.stringify(essentials)); renderEssentials(); }
+function deleteGrocery(index) { groceries.splice(index, 1); localStorage.setItem('cm-groceries', JSON.stringify(groceries)); renderGroceries(); }
+function deleteThought(index) { thoughts.splice(index, 1); localStorage.setItem('cm-thoughts', JSON.stringify(thoughts)); renderThoughts(); }
