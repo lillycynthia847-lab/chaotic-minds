@@ -145,9 +145,10 @@ tailwind.config = {
         <div class="flex items-center gap-2 mb-4"><span class="text-primary text-xs">◆</span><h3 class="font-section-label text-section-label text-on-surface">One thing today</h3></div>
         <div class="bg-white rounded-xl p-card-padding border border-[#D4956A] shadow-[0_12px_40px_rgba(212,149,106,0.12)] flex flex-col items-center text-center relative overflow-hidden">
           <div class="absolute top-4 right-4 text-primary opacity-40 text-lg">✦</div>
-          <p class="font-accent-quote text-2xl text-on-surface mb-2 mt-2" id="focus-task-display">Complete the Studio Portfolio Pitch</p>
+          <input type="text" id="focus-task-display" value="Complete the Studio Portfolio Pitch" class="font-accent-quote text-2xl text-on-surface mb-2 mt-2 bg-transparent text-center border-b border-transparent hover:border-primary/30 focus:border-primary/50 focus:outline-none transition-colors w-full" onchange="saveFocusTask()">
    <div class="flex items-center gap-2 mb-6">
-     <input type="number" id="focus-input-minutes" value="25" min="1" max="120" class="w-16 bg-surface-container-high border border-outline-variant/40 rounded-lg px-2 py-1 text-center font-body-md text-primary focus:outline-none focus:border-primary">
+     <input type="number" id="focus-input-hours" value="0" min="0" max="12" class="w-12 bg-surface-container-high border border-outline-variant/40 rounded-lg px-1 py-1 text-center font-body-md text-primary focus:outline-none focus:border-primary"><span class="text-on-surface-variant text-xs font-cormorant italic mr-1">hrs</span>
+   <input type="number" id="focus-input-minutes" value="25" min="0" max="59" class="w-12 bg-surface-container-high border border-outline-variant/40 rounded-lg px-1 py-1 text-center font-body-md text-primary focus:outline-none focus:border-primary">
      <span class="text-on-surface-variant text-sm font-cormorant italic">minutes</span>
    </div>
           <button onclick="openFocus()" class="w-full py-4 rounded-full rose-gold-gradient text-white font-body-lg pearl-gloss shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 animate-pulse">

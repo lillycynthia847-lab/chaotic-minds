@@ -1102,6 +1102,11 @@ function renderGroceries() {
     actionArea.appendChild(checkBox);
     
     const delBtn = document.createElement('button');
+    const editBtn = document.createElement('button');
+    editBtn.className = 'text-on-surface-variant/50 hover:text-primary active:scale-90 transition-transform ml-2 mr-1';
+    editBtn.innerHTML = '<span class="material-symbols-outlined text-[14px]">edit</span>';
+    editBtn.onclick = () => editGrocery(index);
+    actionArea.appendChild(editBtn);
     delBtn.className = 'text-on-surface-variant/50 hover:text-primary active:scale-90 transition-transform ml-1';
     delBtn.innerHTML = '<span class="material-symbols-outlined text-[14px]">delete</span>';
     delBtn.onclick = () => deleteGrocery(index);
@@ -1245,12 +1250,12 @@ let timerInterval = null;
 let TOTAL = 300; // Default 5 Minutes
 
 function openFocus() {
+  const hrsInput = document.getElementById('focus-input-hours');
   const minInput = document.getElementById('focus-input-minutes');
-  if (minInput && minInput.value) {
-    TOTAL = parseInt(minInput.value) * 60;
-  } else {
-    TOTAL = 25 * 60;
-  }
+  let h = hrsInput ? parseInt(hrsInput.value) || 0 : 0;
+  let m = minInput ? parseInt(minInput.value) || 0 : 0;
+  TOTAL = (h * 3600) + (m * 60);
+  if (TOTAL <= 0) TOTAL = 25 * 60;
   timerSeconds = TOTAL;
   renderTimer();
   const overlay = document.getElementById('focus-overlay');
@@ -1310,12 +1315,17 @@ function resetTimer() {
 }
 
 function renderTimer() {
-  const m = Math.floor(timerSeconds / 60);
+  const h = Math.floor(timerSeconds / 3600);
+  const m = Math.floor((timerSeconds % 3600) / 60);
   const s = timerSeconds % 60;
   
   const display = document.getElementById('timer-display');
   if (display) {
-    display.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if (h > 0) {
+      display.textContent = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    } else {
+      display.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
   }
 
   // Ring Animation
@@ -1646,7 +1656,7 @@ function submitMoodLog() {
   const dateStr = getLocalDateString(calendarSelectedDate || selectedDate || new Date());
   
   moodByDate[dateStr] = { mood: selectedMood, note: note };
-  localStorage.setItem('cm-moods', JSON.stringify(moodByDate));
+  localStorage.setItem('cm-mood-by-date', JSON.stringify(moodByDate));
   
   closeModal('mood-modal');
   renderCalendar();
@@ -1666,3 +1676,68 @@ function deleteExpiry(index) { expiries.splice(index, 1); localStorage.setItem('
 function deleteEssential(index) { essentials.splice(index, 1); localStorage.setItem('cm-essentials', JSON.stringify(essentials)); renderEssentials(); }
 function deleteGrocery(index) { groceries.splice(index, 1); localStorage.setItem('cm-groceries', JSON.stringify(groceries)); renderGroceries(); }
 function deleteThought(index) { thoughts.splice(index, 1); localStorage.setItem('cm-thoughts', JSON.stringify(thoughts)); renderThoughts(); }
+
+function saveFocusTask() {
+  const el = document.getElementById('focus-task-display');
+  if(el) localStorage.setItem('cm-focus-task', el.value);
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const t = localStorage.getItem('cm-focus-task');
+  if(t) {
+    const el = document.getElementById('focus-task-display');
+    if(el) el.value = t;
+  }
+});
+
+// ===== EDIT FUNCTIONS =====
+function editGrocery(index) {
+  const item = groceries[index];
+  const newName = prompt("Edit Grocery Item:", item.name);
+  if (newName !== null && newName.trim() !== '') {
+    groceries[index].name = newName.trim();
+    localStorage.setItem('cm-groceries', JSON.stringify(groceries));
+    renderGroceries();
+  }
+}
+
+function editBill(index) {
+  const item = bills[index];
+  const newName = prompt("Edit Bill Name:", item.name);
+  if (newName !== null && newName.trim() !== '') {
+    const newAmt = prompt("Edit Bill Amount:", item.amount);
+    bills[index].name = newName.trim();
+    if(newAmt) bills[index].amount = newAmt;
+    localStorage.setItem('cm-bills', JSON.stringify(bills));
+    renderBillsAndSubscriptions();
+  }
+}
+
+function editDebt(index) {
+  const item = debts[index];
+  const newName = prompt("Edit Goal Name:", item.name);
+  if (newName !== null && newName.trim() !== '') {
+    debts[index].name = newName.trim();
+    localStorage.setItem('cm-debts', JSON.stringify(debts));
+    renderDebts();
+  }
+}
+
+function editSplurge(index) {
+  const item = splurges[index];
+  const newName = prompt("Edit Splurge Name:", item.name);
+  if (newName !== null && newName.trim() !== '') {
+    splurges[index].name = newName.trim();
+    localStorage.setItem('cm-splurges', JSON.stringify(splurges));
+    renderSplurges();
+  }
+}
+
+function editExpiry(index) {
+  const item = expiries[index];
+  const newName = prompt("Edit Expiry Name:", item.name);
+  if (newName !== null && newName.trim() !== '') {
+    expiries[index].name = newName.trim();
+    localStorage.setItem('cm-expiries', JSON.stringify(expiries));
+    renderExpiries();
+  }
+}
