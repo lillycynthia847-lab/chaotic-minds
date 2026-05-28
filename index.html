@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Chaotic Minds ✦</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#914540">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Libre+Caslon+Text&family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#914540", "on-primary": "#ffffff", "primary-container": "#b05c57",
+        "primary-fixed": "#ffdad7", "primary-fixed-dim": "#ffb3ad", "on-primary-fixed": "#3d0507", "on-primary-fixed-variant": "#77302d", "on-primary-container": "#fffbff", "inverse-primary": "#ffb3ad",
+        "secondary": "#615e5b", "on-secondary": "#ffffff", "secondary-container": "#e8e1de", "secondary-fixed": "#e8e1de", "secondary-fixed-dim": "#cbc5c3", "on-secondary-fixed": "#1d1b1a", "on-secondary-fixed-variant": "#494644", "on-secondary-container": "#686461",
+        "tertiary": "#5f5a65", "on-tertiary": "#ffffff", "tertiary-container": "#78727e", "tertiary-fixed": "#e7e0ed", "tertiary-fixed-dim": "#cbc4d0", "on-tertiary-fixed": "#1d1a23", "on-tertiary-fixed-variant": "#49454f", "on-tertiary-container": "#fffbff",
+        "surface": "#fff8f7", "surface-dim": "#e6d7d5", "surface-bright": "#fff8f7", "surface-variant": "#efdfdd", "surface-tint": "#944742",
+        "surface-container": "#faeae9", "surface-container-low": "#fff0ef", "surface-container-high": "#f4e5e3", "surface-container-highest": "#efdfdd", "surface-container-lowest": "#ffffff",
+        "on-surface": "#221a19", "on-surface-variant": "#544341", "on-background": "#221a19",
+        "background": "#fff8f7", "outline": "#877270", "outline-variant": "#dac1bf",
+        "error": "#ba1a1a", "on-error": "#ffffff", "error-container": "#ffdad6", "on-error-container": "#93000a",
+        "inverse-surface": "#372e2d", "inverse-on-surface": "#fdedeb"
+      },
+      borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px" },
+      spacing: { "container-padding": "24px", "unit": "4px", "section-margin": "40px", "stack-gap": "16px", "card-padding": "20px" },
+      fontFamily: {
+        "body-lg": ["Inter"], "body-md": ["Inter"], "sub-label": ["Inter"],
+        "display-italic": ["Playfair Display"], "display-italic-mobile": ["Playfair Display"], "section-label": ["Playfair Display"],
+        "accent-quote": ["Libre Caslon Text"], "cormorant": ["Cormorant Garamond"]
+      },
+      fontSize: {
+        "body-lg": ["16px", { lineHeight: "1.6", letterSpacing: "0.01em", fontWeight: "500" }],
+        "body-md": ["14px", { lineHeight: "1.5", fontWeight: "400" }],
+        "sub-label": ["12px", { lineHeight: "1.4", letterSpacing: "0.05em", fontWeight: "500" }],
+        "display-italic": ["34px", { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "700" }],
+        "display-italic-mobile": ["28px", { lineHeight: "1.2", fontWeight: "700" }],
+        "section-label": ["20px", { lineHeight: "1.4", fontWeight: "400" }],
+        "accent-quote": ["18px", { lineHeight: "1.5", fontWeight: "400" }]
+      }
+    }
+  }
+};
+</script>
+<style>
+  body { min-height: 100dvh; -webkit-tap-highlight-color: transparent; }
+  .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24; }
+  .icon-fill { font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24; }
+  .rose-gold-gradient { background: linear-gradient(135deg, #D4956A 0%, #E6B9A6 100%); }
+  .rose-gold-dark { background: linear-gradient(135deg, #914540 0%, #d4956a 50%, #914540 100%); }
+  .candlelight-glow { background: radial-gradient(circle at center, rgba(255, 234, 233, 0.98) 0%, rgba(255, 248, 247, 0.98) 100%); }
+  .pearl-gloss { position:relative; overflow:hidden; }
+  .pearl-gloss::before { content:''; position:absolute; top:0; left:0; right:0; height:50%; background:linear-gradient(to bottom,rgba(255,255,255,0.4),transparent); pointer-events:none; z-index:1; }
+  .timer-ring { stroke:#d4956a; stroke-dasharray:283; stroke-dashoffset:0; transform:rotate(-90deg); transform-origin:50% 50%; transition:stroke-dashoffset 1s linear; }
+  .tab { display:none; }
+  .tab.active { display:block; }
+  .nav-btn.active { color:#914540; }
+  .nav-btn.active .nav-icon { font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24; }
+  .appt-panel { display:none; }
+  .appt-panel.open { display:block; }
+  .fab-item { animation: fabIn 0.25s cubic-bezier(0.34,1.56,0.64,1) both; }
+  @keyframes fabIn { from { opacity:0; transform:translateY(20px) scale(0.8); } to { opacity:1; transform:translateY(0) scale(1); } }
+  .fab-item:nth-child(1){animation-delay:0.05s}
+  .fab-item:nth-child(2){animation-delay:0.1s}
+  .fab-item:nth-child(3){animation-delay:0.15s}
+  .fab-item:nth-child(4){animation-delay:0.2s}
+
+  /* Drawer panel slide styling */
+  .drawer-panel { transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+  .drawer-panel.open { transform: translateX(0); }
+
+  /* Interactive Modals */
+  .modal-overlay { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+  .modal-content { transform: translateY(30px) scale(0.98); transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+  .modal-overlay.open .modal-content { transform: translateY(0) scale(1); }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-hidden">
+
+<!-- FLOATING HEADER BUTTONS -->
+<header class="fixed top-0 w-full z-50 bg-transparent flex items-center justify-between px-container-padding py-4 pointer-events-none">
+  <button onclick="toggleDrawer()" class="pointer-events-auto w-10 h-10 rounded-full bg-surface/80 backdrop-blur-xl border border-outline-variant/30 flex items-center justify-center text-primary shadow-sm hover:scale-105 active:scale-95 transition-all">
+    <span class="material-symbols-outlined">menu</span>
+  </button>
+</header>
+
+<!-- TAB SECTIONS -->
+<main class="pt-[72px] h-dvh overflow-hidden">
+
+  <!-- TODAY TAB -->
+  <section id="tab-today" class="tab active h-full overflow-y-auto pb-20 scrollbar-hide">
+    <!-- HERO -->
+    <section class="bg-gradient-to-b from-[#F5D5CF] to-[#FFF8F5] px-container-padding pt-8 pb-10">
+      <p id="greeting" class="font-cormorant italic text-accent-quote text-primary mb-2">Good morning, Cynthia</p>
+      <div class="flex flex-col items-center justify-center my-6">
+        <h2 id="clock" class="font-display-italic text-[64px] leading-tight text-primary italic">00:00</h2>
+        <p id="hero-date" onclick="openCalendarModal()" class="font-body-lg text-body-lg text-secondary tracking-widest uppercase cursor-pointer hover:text-primary transition-colors flex items-center justify-center gap-1.5" title="Open Calendar">
+          Loading...
+          <span class="material-symbols-outlined text-xs">calendar_month</span>
+        </p>
+      </div>
+      <!-- Week Strip -->
+      <div id="week-strip" class="flex justify-between items-center gap-1 mt-6 overflow-x-auto"></div>
+      <div class="w-full h-[1px] bg-gradient-to-r from-transparent via-outline-variant/50 to-transparent mt-8"></div>
+    </section>
+
+    <!-- CONTENT -->
+    <section class="bg-[#FDF0F0] rounded-t-[32px] -mt-4 px-container-padding pt-10 min-h-screen">
+
+      <!-- Mood Card -->
+      <div class="mb-section-margin bg-white rounded-xl p-card-padding border border-[#D4956A]/20 shadow-[0_8px_30px_rgba(212,149,106,0.08)]">
+        <h3 class="font-section-label text-section-label text-on-surface mb-4">How are you feeling?</h3>
+        <div class="flex flex-wrap gap-3">
+          <button onclick="setMood(this, 'Calm')" class="mood-btn px-6 py-2.5 rounded-full bg-white/40 backdrop-blur-md border border-white/60 text-on-surface-variant font-sub-label transition-all duration-300 active:scale-95 shadow-sm">Calm</button>
+          <button onclick="setMood(this, 'Lit')" class="mood-btn px-6 py-2.5 rounded-full bg-white/40 backdrop-blur-md border border-white/60 text-on-surface-variant font-sub-label transition-all duration-300 active:scale-95 shadow-sm">Lit</button>
+          <button onclick="setMood(this, 'Chaos')" class="mood-btn px-6 py-2.5 rounded-full bg-white/40 backdrop-blur-md border border-white/60 text-on-surface-variant font-sub-label transition-all duration-300 active:scale-95 shadow-sm">Chaos</button>
+        </div>
+        <div class="mt-4 pt-4 border-t border-outline-variant/20">
+          <p class="font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Mood Garden (Last 7 Days)</p>
+          <div id="mood-garden" class="flex gap-2.5 items-center">
+            <!-- Dynamically populated mood dots -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Appointments -->
+      <div class="mb-section-margin">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-primary text-xs">◆</span>
+          <h3 id="appointments-header" class="font-section-label text-section-label text-on-surface">You have somewhere to be</h3>
+        </div>
+        <div id="appointments-container" class="space-y-3">
+          <!-- Dynamically populated appointments or empty state -->
+        </div>
+      </div>
+
+      <!-- One Thing Today -->
+      <div class="mb-section-margin pb-10">
+        <div class="flex items-center gap-2 mb-4"><span class="text-primary text-xs">◆</span><h3 class="font-section-label text-section-label text-on-surface">One thing today</h3></div>
+        <div class="bg-white rounded-xl p-card-padding border border-[#D4956A] shadow-[0_12px_40px_rgba(212,149,106,0.12)] flex flex-col items-center text-center relative overflow-hidden">
+          <div class="absolute top-4 right-4 text-primary opacity-40 text-lg">✦</div>
+          <p class="font-accent-quote text-2xl text-on-surface mb-6 mt-2">Complete the Studio Portfolio Pitch</p>
+          <button onclick="openFocus()" class="w-full py-4 rounded-full rose-gold-gradient text-white font-body-lg pearl-gloss shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-2 animate-pulse">
+            Begin 5 min focus <span>✦</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+  </section>
+
+  <!-- NEST TAB -->
+  <section id="tab-nest" class="tab h-full overflow-y-auto pb-20 scrollbar-hide">
+    <section class="bg-gradient-to-b from-primary-fixed to-surface-container px-container-padding pt-8 pb-10 relative overflow-hidden">
+      <div class="relative z-10">
+        <h2 class="font-display-italic text-display-italic text-primary mb-2">Keeping you stocked</h2>
+        <p class="font-body-md text-body-md text-on-surface-variant max-w-[200px]">A curated overview of your living space essentials.</p>
+      </div>
+      <div class="absolute -right-8 -bottom-8 opacity-20"><span class="material-symbols-outlined text-[120px]">local_florist</span></div>
+    </section>
+    <div class="px-container-padding pt-8 pb-10 bg-[#FFF8F5] min-h-screen">
+      <div class="flex items-center gap-2 mb-4"><span class="text-primary text-xs">◆</span><h3 class="font-section-label text-section-label text-primary">Running Out</h3></div>
+      <div id="essentials-container" class="grid gap-stack-gap mb-section-margin">
+        <!-- Dynamic Essentials Rendered Here -->
+      </div>
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2"><span class="text-primary text-xs">◆</span><h3 class="font-section-label text-section-label text-primary">Grocery List</h3></div>
+        <!-- Shopping Mode Toggle -->
+        <label class="flex items-center gap-2 cursor-pointer">
+          <span class="font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant font-semibold">🛒 Shopping Mode</span>
+          <div class="relative">
+            <input type="checkbox" id="shopping-mode-toggle" class="sr-only" onchange="toggleShoppingMode()">
+            <div class="block bg-surface-container-high w-8 h-4 rounded-full border border-outline-variant/40 transition-colors" id="shopping-mode-bg"></div>
+            <div class="absolute left-[3px] top-[3px] bg-white w-2.5 h-2.5 rounded-full transition-transform duration-300" id="shopping-mode-dot"></div>
+          </div>
+        </label>
+      </div>
+      <div id="grocery-list" class="space-y-3 mb-4">
+        <!-- Dynamic Grocery Items Rendered Here -->
+      </div>
+      <!-- Footer for Totals -->
+      <div id="grocery-totals-footer" class="bg-surface-container-lowest p-4 rounded-xl border border-primary/20 shadow-sm flex items-center justify-between mb-section-margin">
+        <span class="font-body-md text-sm text-on-surface-variant" id="grocery-total-label">Estimated Trip Total</span>
+        <span class="font-display-italic text-lg text-primary italic" id="grocery-total-value">Ksh 0</span>
+      </div>
+      <!-- NEST RHYTHMS -->
+      <div class="flex items-center justify-between mb-4 mt-8">
+        <div class="flex items-center gap-2"><span class="text-primary text-xs">◆</span><h3 class="font-section-label text-section-label text-primary">Nest Rhythms</h3></div>
+        <button onclick="openModal('rhythm-modal')" class="text-primary hover:text-primary-container active:scale-95 transition-transform"><span class="material-symbols-outlined">add_circle</span></button>
+      </div>
+      <div id="rhythms-container" class="grid gap-stack-gap mb-section-margin"></div>
+
+      <button onclick="openModal('grocery-modal')" class="w-full rose-gold-gradient text-white py-4 rounded-full font-body-lg pearl-gloss shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2"><span class="material-symbols-outlined">add</span>Add grocery item</button>
+    </div>
+  </section>
+
+  <!-- ADULTING TAB -->
+  <section id="tab-adulting" class="tab h-full overflow-y-auto pb-20 scrollbar-hide">
+    <section class="bg-gradient-to-br from-[#E7E0ED] to-[#fff8f7] px-container-padding pt-8 pb-10 rounded-xl mx-4 mt-4 border border-white/40 shadow-sm relative overflow-hidden">
+      <div class="relative z-10 max-w-[200px]"><h2 class="font-display-italic text-display-italic text-primary mb-2">Boring stuff, sorted.</h2><p class="font-sub-label text-sub-label text-on-surface-variant uppercase tracking-widest">Life Admin Dashboard</p></div>
+      <div class="absolute top-0 right-0 w-32 h-32 opacity-20 pointer-events-none"><span class="material-symbols-outlined text-[120px] text-primary">work_outline</span></div>
+    </section>
+    <div class="px-container-padding pt-8 pb-10 min-h-screen">
+      <div class="flex items-center gap-2 mb-4"><span class="text-primary text-xs">◆</span><h3 class="font-section-label text-section-label text-primary">Bills</h3></div>
+      <div id="bills-container" class="grid gap-stack-gap mb-section-margin">
+        <!-- Dynamic Bills Rendered Here -->
+      </div>
+      <div class="flex items-center gap-2 mb-4"><span class="text-primary text-xs">◆</span><h3 class="font-section-label text-section-label text-primary">Subscriptions</h3></div>
+      <div id="subscriptions-container" class="grid gap-stack-gap mb-section-margin">
+        <!-- Dynamic Subscriptions Rendered Here -->
+      </div>
+      <!-- CLEARING THE SLATE -->
+      <div class="flex items-center justify-between mb-4 mt-8">
+        <div class="flex items-center gap-2"><span class="text-primary text-xs">◆</span><h3 class="font-section-label text-section-label text-primary">Clearing the Slate</h3></div>
+        <button onclick="openModal('debt-modal')" class="text-primary hover:text-primary-container active:scale-95 transition-transform"><span class="material-symbols-outlined">add_circle</span></button>
+      </div>
+      <div id="debts-container" class="grid gap-stack-gap mb-section-margin"></div>
+
+      <!-- GUILT-FREE SPLURGES -->
+      <div class="flex items-center justify-between mb-4 mt-8">
+        <div class="flex items-center gap-2"><span class="text-primary text-xs">◆</span><h3 class="font-section-label text-section-label text-primary">Guilt-Free Splurges</h3></div>
+        <button onclick="openModal('splurge-modal')" class="text-primary hover:text-primary-container active:scale-95 transition-transform"><span class="material-symbols-outlined">add_circle</span></button>
+      </div>
+      <div id="splurges-container" class="grid gap-stack-gap mb-section-margin"></div>
+
+      <!-- LIFE ADMIN EXPIRIES -->
+      <div class="flex items-center justify-between mb-4 mt-8">
+        <div class="flex items-center gap-2"><span class="text-primary text-xs">◆</span><h3 class="font-section-label text-section-label text-primary">Life Admin Expiries</h3></div>
+        <button onclick="openModal('expiry-modal')" class="text-primary hover:text-primary-container active:scale-95 transition-transform"><span class="material-symbols-outlined">add_circle</span></button>
+      </div>
+      <div id="expiries-container" class="grid gap-stack-gap mb-section-margin"></div>
+
+      <button onclick="openModal('bill-modal')" class="w-full rose-gold-gradient text-white py-5 rounded-full font-body-lg pearl-gloss shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2"><span class="material-symbols-outlined">add</span>Add bill or sub</button>
+    </div>
+  </section>
+
+  <!-- MIND TAB -->
+  <section id="tab-mind" class="tab h-full overflow-y-auto pb-20 scrollbar-hide">
+    <!-- Hero Section -->
+    <section class="px-container-padding py-section-margin bg-gradient-to-b from-[#FDF0F0] to-[#FFF8F7] text-center">
+      <h2 class="font-display-italic text-display-italic text-primary mb-2">Just let it out.</h2>
+      <p class="font-cormorant italic text-[20px] text-on-surface-variant opacity-80">No structure needed here.</p>
+    </section>
+
+    <!-- Input Card Section -->
+    <section class="px-container-padding -mt-8 relative z-10">
+      <div class="bg-surface-container-lowest rounded-xl p-card-padding border border-outline-variant shadow-[0_10px_30px_rgba(212,149,106,0.08)]">
+        <textarea id="mind-textarea" class="w-full min-h-[160px] bg-transparent border-none focus:ring-0 font-body-md text-body-md italic text-on-surface-variant resize-none placeholder:text-outline-variant" placeholder="What's on your mind right now?..."></textarea>
+        <div class="mt-4 pt-4 border-t border-outline-variant/20 flex items-center justify-between">
+          <span class="font-cormorant italic text-body-lg text-secondary">No judgment, ever.</span>
+          <button onclick="saveThought()" class="rose-gold-gradient pearl-gloss text-on-primary rounded-full px-8 py-2.5 font-body-md font-medium shadow-lg active:scale-95 transition-transform flex items-center gap-2">
+            Save ✦
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Thoughts Section -->
+    <section class="mt-section-margin px-container-padding">
+      <header class="flex items-center gap-2 mb-6">
+        <h3 class="font-section-label text-section-label text-primary">◆ Recent thoughts</h3>
+      </header>
+      <div id="thoughts-container" class="grid grid-cols-2 gap-4">
+        <!-- Card 1: Blush -->
+        <div class="bg-[#FDE8E8] p-card-padding rounded-xl border border-[#D4956A]/30 shadow-sm flex flex-col gap-3 min-h-[140px]">
+          <div class="flex items-center justify-between">
+            <span class="text-xl">💡</span>
+            <span class="font-cormorant italic text-sub-label text-secondary">Today</span>
+          </div>
+          <p class="font-body-md text-on-surface leading-snug">The way the morning light hit the kitchen counter felt like a reset...</p>
+        </div>
+        <!-- Card 2: Lavender -->
+        <div class="bg-[#F0EAF8] p-card-padding rounded-xl border border-[#D4956A]/30 shadow-sm flex flex-col gap-3 min-h-[140px]">
+          <div class="flex items-center justify-between">
+            <span class="text-xl">☁️</span>
+            <span class="font-cormorant italic text-sub-label text-secondary">Yesterday</span>
+          </div>
+          <p class="font-body-md text-on-surface leading-snug">Too many tabs open in my brain today. Need to breathe through the noise.</p>
+        </div>
+        <!-- Card 3: Mint -->
+        <div class="bg-[#E8F4EC] p-card-padding rounded-xl border border-[#D4956A]/30 shadow-sm flex flex-col gap-3 min-h-[140px]">
+          <div class="flex items-center justify-between">
+            <span class="text-xl">🌿</span>
+            <span class="font-cormorant italic text-sub-label text-secondary">Oct 24</span>
+          </div>
+          <p class="font-body-md text-on-surface leading-snug">Found peace in the park today. Nature is the best therapist.</p>
+        </div>
+        <!-- Card 4: Champagne -->
+        <div class="bg-[#FDF0DC] p-card-padding rounded-xl border border-[#D4956A]/30 shadow-sm flex flex-col gap-3 min-h-[140px]">
+          <div class="flex items-center justify-between">
+            <span class="text-xl">✨</span>
+            <span class="font-cormorant italic text-sub-label text-secondary">Oct 22</span>
+          </div>
+          <p class="font-body-md text-on-surface leading-snug">Grateful for the small wins. Finally finished that chapter.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Decorative Quote Spacer -->
+    <section class="my-section-margin px-container-padding py-10 bg-[#FFF8F5] border-y border-outline-variant/10 text-center mb-24">
+      <p class="font-accent-quote text-accent-quote text-primary-container italic max-w-[280px] mx-auto">
+        "Your mind is a sacred space. Curate it with kindness."
+      </p>
+    </section>
+  </section>
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-t border-outline-variant/20 shadow-[0_-4px_20px_rgba(212,149,106,0.1)] flex justify-around items-center px-4 pt-2 pb-3 pointer-events-auto">
+  <button onclick="switchTab('today', this)" class="nav-btn active flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors py-1 px-3">
+    <span class="material-symbols-outlined nav-icon text-2xl">calendar_today</span>
+    <span class="font-sub-label text-[10px] uppercase tracking-wider font-semibold">Today</span>
+  </button>
+  <button onclick="switchTab('nest', this)" class="nav-btn flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors py-1 px-3">
+    <span class="material-symbols-outlined nav-icon text-2xl">cottage</span>
+    <span class="font-sub-label text-[10px] uppercase tracking-wider font-semibold">Nest</span>
+  </button>
+  <button onclick="switchTab('adulting', this)" class="nav-btn flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors py-1 px-3">
+    <span class="material-symbols-outlined nav-icon text-2xl">account_balance_wallet</span>
+    <span class="font-sub-label text-[10px] uppercase tracking-wider font-semibold">Adulting</span>
+  </button>
+  <button onclick="switchTab('mind', this)" class="nav-btn flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors py-1 px-3">
+    <span class="material-symbols-outlined nav-icon text-2xl">psychology</span>
+    <span class="font-sub-label text-[10px] uppercase tracking-wider font-semibold">Mind</span>
+  </button>
+</nav>
+
+<!-- FOCUS OVERLAY — Stage 4 -->
+<div id="focus-overlay" class="fixed inset-0 z-[100] hidden candlelight-glow backdrop-blur-xl flex flex-col items-center justify-between px-container-padding py-20">
+  
+  <!-- Close Button -->
+  <button onclick="closeFocus()" class="absolute top-6 left-6 text-primary hover:opacity-80 active:scale-95 transition-transform duration-200">
+    <span class="material-symbols-outlined text-3xl">close</span>
+  </button>
+
+  <!-- Header Section -->
+  <header class="text-center mt-6">
+    <span class="font-cormorant italic text-[22px] text-primary block mb-2">
+      Right now, just this:
+    </span>
+    <h1 id="focus-title" class="font-display-italic-mobile text-display-italic-mobile text-on-surface max-w-xs mx-auto italic leading-tight">
+      Drafting the Quiet Vision
+    </h1>
+  </header>
+
+  <!-- Central Timer Section -->
+  <section class="relative flex items-center justify-center">
+    <!-- Decorative Sparkle -->
+    <div class="absolute -top-8 -right-8 text-primary opacity-40">
+      <span class="material-symbols-outlined text-[32px]">flare</span>
+    </div>
+    <!-- Timer Ring -->
+    <div class="relative w-64 h-64 md:w-80 md:h-80 flex items-center justify-center">
+      <svg class="absolute inset-0 w-full h-full" viewBox="0 0 100 100">
+        <circle class="text-outline-variant/30" cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-width="0.5"></circle>
+        <circle id="ring-fg" class="timer-ring" cx="50" cy="50" fill="none" r="45" stroke-linecap="round" stroke-width="1.5"></circle>
+      </svg>
+      <div class="text-center">
+        <span id="timer-display" class="font-display-italic text-[64px] md:text-[80px] text-primary tracking-tighter">
+          05:00
+        </span>
+      </div>
+    </div>
+    <!-- Subtle Pulse Background -->
+    <div class="absolute inset-0 -z-10 rounded-full bg-primary/5 blur-3xl scale-150 animate-pulse"></div>
+  </section>
+
+  <!-- Action Section -->
+  <div class="flex flex-col items-center gap-8 w-full mb-6">
+    <button id="focus-toggle-btn" onclick="toggleTimer()" class="rose-gold-dark glossy-shine w-full max-w-xs py-4 px-8 rounded-full shadow-[0_8px_30px_rgba(145,69,64,0.15)] active:scale-95 transition-all duration-300">
+      <span id="focus-btn-text" class="text-on-primary font-body-lg flex items-center justify-center gap-2">
+        Begin Focus ✦
+      </span>
+    </button>
+    <footer class="text-center">
+      <p id="focus-msg" class="font-cormorant italic text-[18px] text-on-surface-variant">
+        You started. That's everything. 🌸
+      </p>
+    </footer>
+  </div>
+
+</div>
+
+<!-- FAB BACKDROP -->
+<div id="fab-backdrop" class="hidden fixed inset-0 z-[60] bg-surface-bright/40 backdrop-blur-md" onclick="closeFab()"></div>
+
+<!-- FAB MENU -->
+<div id="fab-menu" class="hidden fixed bottom-44 right-6 z-[70] flex flex-col items-end gap-4">
+  <div class="fab-item flex items-center gap-3 bg-surface-container-lowest border border-[#D4956A] px-6 py-3 rounded-full shadow-[0_4px_15px_rgba(212,149,106,0.15)] cursor-pointer" onclick="closeFab(); switchTab('mind', document.querySelector('.nav-btn:nth-child(4)'))">
+    <span class="text-primary text-[10px]">◆</span>
+    <span class="font-display-italic text-[18px] text-on-surface">Note</span>
+  </div>
+  <div class="fab-item flex items-center gap-3 bg-surface-container-lowest border border-[#D4956A] px-6 py-3 rounded-full shadow-[0_4px_15px_rgba(212,149,106,0.15)] cursor-pointer" onclick="closeFab(); switchTab('today', document.querySelector('.nav-btn:nth-child(1)')); openModal('appointment-modal')">
+    <span class="text-primary text-[10px]">◆</span>
+    <span class="font-display-italic text-[18px] text-on-surface">Appointment</span>
+  </div>
+  <div class="fab-item flex items-center gap-3 bg-surface-container-lowest border border-[#D4956A] px-6 py-3 rounded-full shadow-[0_4px_15px_rgba(212,149,106,0.15)] cursor-pointer" onclick="closeFab(); openModal('grocery-modal')">
+    <span class="text-primary text-[10px]">◆</span>
+    <span class="font-display-italic text-[18px] text-on-surface">Grocery item</span>
+  </div>
+  <div class="fab-item flex items-center gap-3 bg-surface-container-lowest border border-[#D4956A] px-6 py-3 rounded-full shadow-[0_4px_15px_rgba(212,149,106,0.15)] cursor-pointer" onclick="closeFab(); openModal('bill-modal')">
+    <span class="text-primary text-[10px]">◆</span>
+    <span class="font-display-italic text-[18px] text-on-surface">Bill</span>
+  </div>
+</div>
+
+<!-- FAB BUTTON -->
+<button id="fab-btn" onclick="toggleFab()" class="fixed bottom-24 right-6 z-[70] w-16 h-16 rounded-full rose-gold-gradient shadow-xl flex items-center justify-center pearl-gloss transition-transform duration-300 active:scale-95">
+  <span id="fab-icon" class="material-symbols-outlined text-white text-3xl font-light">add</span>
+</button>
+
+<!-- SETTINGS DRAWER BACKDROP -->
+<div id="drawer-backdrop" class="hidden fixed inset-0 z-[80] bg-surface-bright/40 backdrop-blur-md transition-opacity duration-300" onclick="toggleDrawer()"></div>
+
+<!-- SETTINGS DRAWER -->
+<div id="settings-drawer" class="drawer-panel fixed top-0 left-0 w-85 h-full z-[90] bg-surface-container-lowest/95 backdrop-blur-xl border-r border-outline-variant/30 shadow-[4px_0_30px_rgba(212,149,106,0.08)] flex flex-col p-6 overflow-y-auto">
+  <div class="flex justify-between items-center mb-6 pb-4 border-b border-outline-variant/10">
+    <h3 class="font-display-italic text-2xl text-primary italic">Sanctuary</h3>
+    <button onclick="toggleDrawer()" class="text-on-surface-variant hover:text-primary active:scale-90 transition-transform">
+      <span class="material-symbols-outlined text-2xl">close</span>
+    </button>
+  </div>
+
+  <div class="space-y-5 flex-grow text-xs">
+    <!-- ACCOUNT SECTION -->
+    <div class="space-y-3 pb-4 border-b border-outline-variant/10">
+      <h4 class="font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant font-semibold">Account & Sync</h4>
+      <div id="account-status-container">
+        <!-- Dynamically rendered Account Status -->
+      </div>
+    </div>
+
+    <!-- PROFILE/USER SETTINGS -->
+    <div class="space-y-3 pb-4 border-b border-outline-variant/10">
+      <h4 class="font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant font-semibold">Profile</h4>
+      <div>
+        <label class="block font-sub-label text-[9px] uppercase tracking-wider text-on-surface-variant mb-1">Username</label>
+        <input type="text" id="settings-name" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-3 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors text-xs" value="Cynthia">
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div class="space-y-3 pb-4 border-b border-outline-variant/10">
+      <h4 class="font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant font-semibold">Notifications</h4>
+      <div class="space-y-2">
+        <label class="flex items-center justify-between cursor-pointer">
+          <span class="text-on-surface-variant text-[11px]">Mood logging prompts</span>
+          <input type="checkbox" id="settings-notif-mood" class="accent-[#914540] w-4 h-4 rounded">
+        </label>
+        <label class="flex items-center justify-between cursor-pointer">
+          <span class="text-on-surface-variant text-[11px]">Bill due reminders</span>
+          <input type="checkbox" id="settings-notif-bills" class="accent-[#914540] w-4 h-4 rounded">
+        </label>
+        <label class="flex items-center justify-between cursor-pointer">
+          <span class="text-on-surface-variant text-[11px]">Low stock alerts</span>
+          <input type="checkbox" id="settings-notif-nest" class="accent-[#914540] w-4 h-4 rounded">
+        </label>
+      </div>
+    </div>
+
+    <!-- SOUND EFFECTS -->
+    <div class="space-y-3 pb-4 border-b border-outline-variant/10">
+      <div class="flex items-center justify-between">
+        <h4 class="font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant font-semibold">Sound Themes</h4>
+        <button onclick="playTestSound()" class="text-primary hover:opacity-80 active:scale-95 transition-all flex items-center gap-1">
+          <span class="material-symbols-outlined text-base">volume_up</span>
+          <span class="text-[9px] uppercase tracking-widest">Test</span>
+        </button>
+      </div>
+      <select id="settings-sound" onchange="playTestSound()" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-3 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors text-xs">
+        <option value="chime">Serene Chime 🔔</option>
+        <option value="bell">Forest Bell 🍃</option>
+        <option value="none">Muted 🔇</option>
+      </select>
+    </div>
+
+    <!-- LOCALIZATION -->
+    <div class="space-y-3 pb-4 border-b border-outline-variant/10">
+      <h4 class="font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant font-semibold">Localization</h4>
+      
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="block font-sub-label text-[9px] uppercase tracking-wider text-on-surface-variant mb-1">Language</label>
+          <select id="settings-language" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-3 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors text-xs">
+            <option value="en">English</option>
+            <option value="sw">Kiswahili</option>
+            <option value="fr">Français</option>
+            <option value="es">Español</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-sub-label text-[9px] uppercase tracking-wider text-on-surface-variant mb-1">Currency</label>
+          <select id="settings-currency" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-3 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors text-xs">
+            <option value="Ksh">Ksh (KES)</option>
+            <option value="$">$ (USD)</option>
+            <option value="£">£ (GBP)</option>
+            <option value="€">€ (EUR)</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-sub-label text-[9px] uppercase tracking-wider text-on-surface-variant mb-1">Date Format</label>
+        <select id="settings-date-format" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-3 py-2 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors text-xs">
+          <option value="MMM DD, YYYY">MMM DD, YYYY (e.g. May 26, 2026)</option>
+          <option value="DD/MM/YYYY">DD/MM/YYYY (e.g. 26/05/2026)</option>
+          <option value="MM/DD/YYYY">MM/DD/YYYY (e.g. 05/26/2026)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="space-y-2">
+      <h4 class="font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant font-semibold">Sanctuary Stats</h4>
+      <div class="flex justify-between items-center text-xs">
+        <span class="text-on-surface-variant">Nest Stock Low:</span>
+        <span id="stats-low-stock" class="font-bold text-primary">0 items</span>
+      </div>
+      <div class="flex justify-between items-center text-xs">
+        <span class="text-on-surface-variant">Monthly Bills:</span>
+        <span id="stats-total-bills" class="font-bold text-primary">Ksh 0</span>
+      </div>
+      <div class="flex justify-between items-center text-xs">
+        <span class="text-on-surface-variant">Mind Notes:</span>
+        <span id="stats-mind-count" class="font-bold text-primary">0 logs</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6 pt-4 border-t border-outline-variant/10 space-y-2">
+    <button onclick="saveSettings()" class="w-full py-2.5 rounded-full rose-gold-gradient text-white font-body-md pearl-gloss shadow-md hover:opacity-90 active:scale-[0.97] transition-all flex items-center justify-center gap-2 text-xs">
+      Save Changes ✦
+    </button>
+    <button onclick="resetAtelier()" class="w-full py-2.5 rounded-full bg-surface-container-high border border-outline-variant/50 text-[#914540] font-body-md hover:bg-outline-variant/20 active:scale-[0.97] transition-all flex items-center justify-center gap-2 text-xs">
+      Reset Sanctuary ⚠️
+    </button>
+  </div>
+</div>
+
+<!-- GROCERY FORM MODAL -->
+<div id="grocery-modal" class="modal-overlay fixed inset-0 z-[100] bg-surface-bright/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="modal-content w-full max-w-sm bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-[0_15px_40px_rgba(212,149,106,0.12)] p-6">
+    <h3 class="font-display-italic text-2xl text-primary mb-4 italic">Add Grocery Item</h3>
+    <div class="space-y-4 mb-6">
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Item Name</label>
+        <input type="text" id="grocery-input-name" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. Lavender Tea">
+      </div>
+    </div>
+    <div class="flex gap-3 justify-end">
+      <button onclick="closeModal('grocery-modal')" class="px-5 py-2.5 rounded-full bg-surface-container-high border border-outline-variant/40 font-sub-label text-on-surface-variant hover:bg-outline-variant/20 transition-colors">Cancel</button>
+      <button onclick="submitGroceryItem()" class="px-6 py-2.5 rounded-full rose-gold-gradient text-white font-sub-label pearl-gloss shadow-md hover:opacity-95 active:scale-95 transition-transform">Add ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRICE FORM MODAL -->
+<div id="price-modal" class="modal-overlay fixed inset-0 z-[100] bg-surface-bright/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="modal-content w-full max-w-sm bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-[0_15px_40px_rgba(212,149,106,0.12)] p-6">
+    <h3 class="font-display-italic text-2xl text-primary mb-4 italic" id="price-modal-title">Add Price</h3>
+    <div class="space-y-4 mb-6">
+      <input type="hidden" id="price-input-index">
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Price Paid</label>
+        <input type="number" id="price-input-amount" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. 350">
+      </div>
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Store (Optional)</label>
+        <input type="text" id="price-input-store" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. Naivas">
+      </div>
+    </div>
+    <div class="flex gap-3 justify-end">
+      <button onclick="closeModal('price-modal')" class="px-5 py-2.5 rounded-full bg-surface-container-high border border-outline-variant/40 font-sub-label text-on-surface-variant hover:bg-outline-variant/20 transition-colors">Cancel</button>
+      <button onclick="submitGroceryPrice()" class="px-6 py-2.5 rounded-full rose-gold-gradient text-white font-sub-label pearl-gloss shadow-md hover:opacity-95 active:scale-95 transition-transform">Save ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- BILL FORM MODAL -->
+<div id="bill-modal" class="modal-overlay fixed inset-0 z-[100] bg-surface-bright/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="modal-content w-full max-w-sm bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-[0_15px_40px_rgba(212,149,106,0.12)] p-6">
+    <h3 class="font-display-italic text-2xl text-primary mb-4 italic">Add New Bill</h3>
+    <div class="space-y-4 mb-6">
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Bill Name</label>
+        <input type="text" id="bill-input-name" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. Gym Membership">
+      </div>
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Amount</label>
+        <input type="number" id="bill-input-amount" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. 2500">
+      </div>
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Category / Icon</label>
+        <select id="bill-input-icon" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors">
+          <option value="wifi">🌐 Internet</option>
+          <option value="tv">📺 Entertainment</option>
+          <option value="music_note">🎵 Music / Media</option>
+          <option value="fitness_center">🏋️ Fitness / Wellness</option>
+          <option value="home">🏠 Rent / Utilities</option>
+          <option value="shopping_bag">🛍️ Subscriptions</option>
+        </select>
+      </div>
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Due Date</label>
+        <input type="text" id="bill-input-date" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. Due Oct 28">
+      </div>
+      <div class="flex gap-4 items-center">
+        <label class="flex items-center gap-2 font-body-md text-on-surface-variant text-xs cursor-pointer">
+          <input type="checkbox" id="bill-input-recurring" class="accent-[#914540] w-4 h-4" checked>
+          <span>Recurring subscription</span>
+        </label>
+      </div>
+    </div>
+    <div class="flex gap-3 justify-end">
+      <button onclick="closeModal('bill-modal')" class="px-5 py-2.5 rounded-full bg-surface-container-high border border-outline-variant/40 font-sub-label text-on-surface-variant hover:bg-outline-variant/20 transition-colors">Cancel</button>
+      <button onclick="submitBillItem()" class="px-6 py-2.5 rounded-full rose-gold-gradient text-white font-sub-label pearl-gloss shadow-md hover:opacity-95 active:scale-95 transition-transform">Add ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- APPOINTMENT FORM MODAL -->
+<div id="appointment-modal" class="modal-overlay fixed inset-0 z-[110] bg-surface-bright/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="modal-content w-full max-w-sm bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-[0_15px_40px_rgba(212,149,106,0.12)] p-6">
+    <h3 class="font-display-italic text-2xl text-primary mb-4 italic">Add Appointment</h3>
+    <div class="space-y-4 mb-6">
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Event Title</label>
+        <input type="text" id="appt-input-title" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. Tea with Sarah">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Time</label>
+          <input type="text" id="appt-input-time" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-3 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. 06:00 PM">
+        </div>
+        <div>
+          <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Date</label>
+          <input type="date" id="appt-input-date" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-3 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors">
+        </div>
+      </div>
+    </div>
+    <div class="flex gap-3 justify-end">
+      <button onclick="closeModal('appointment-modal')" class="px-5 py-2.5 rounded-full bg-surface-container-high border border-outline-variant/40 font-sub-label text-on-surface-variant hover:bg-outline-variant/20 transition-colors">Cancel</button>
+      <button onclick="submitAppointmentItem()" class="px-6 py-2.5 rounded-full rose-gold-gradient text-white font-sub-label pearl-gloss shadow-md hover:opacity-95 active:scale-95 transition-transform">Add ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- CALENDAR MODAL (Option 2: Seasons Calendar) -->
+<div id="calendar-modal" class="modal-overlay fixed inset-0 z-[100] bg-surface-bright/50 backdrop-blur-md flex items-center justify-center p-4">
+  <div class="modal-content w-full max-w-sm bg-white/70 backdrop-blur-xl rounded-3xl border border-[#D4956A]/30 shadow-[0_20px_50px_rgba(145,69,64,0.15)] overflow-hidden flex flex-col max-h-[90vh]">
+    <!-- Header -->
+    <div class="p-5 flex items-center justify-between border-b border-outline-variant/20">
+      <h3 class="font-display-italic text-2xl text-primary italic">Seasons</h3>
+      <button onclick="closeCalendarModal()" class="w-8 h-8 rounded-full bg-surface-container-high hover:bg-outline-variant/20 flex items-center justify-center transition-colors">
+        <span class="material-symbols-outlined text-on-surface text-lg">close</span>
+      </button>
+    </div>
+
+    <!-- Calendar Content -->
+    <div class="p-5 overflow-y-auto space-y-4">
+      <div class="flex items-center justify-between">
+        <button onclick="changeCalendarMonth(-1)" class="p-2 hover:bg-outline-variant/20 rounded-full transition-colors flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary text-lg">chevron_left</span>
+        </button>
+        <span id="calendar-month-year" class="font-display-italic text-[18px] text-on-surface italic font-semibold">October 2026</span>
+        <button onclick="changeCalendarMonth(1)" class="p-2 hover:bg-outline-variant/20 rounded-full transition-colors flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary text-lg">chevron_right</span>
+        </button>
+      </div>
+
+      <!-- Week Days Header -->
+      <div class="grid grid-cols-7 text-center font-sub-label text-[9px] uppercase tracking-wider text-on-surface-variant font-bold mb-2">
+        <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+      </div>
+
+      <!-- Calendar Days Grid -->
+      <div id="calendar-days-grid" class="grid grid-cols-7 gap-y-3.5 gap-x-1.5 text-center font-body-md text-xs">
+        <!-- Days will be generated dynamically -->
+      </div>
+    </div>
+    
+    <!-- Dynamic Agenda / Info Footer -->
+    <div id="calendar-agenda-footer" class="bg-surface-container-low/60 p-4 border-t border-outline-variant/20 flex flex-col gap-2">
+      <!-- Dynamically filled on date tap -->
+    </div>
+  </div>
+</div>
+
+<!-- CLEARING THE SLATE MODAL -->
+<div id="debt-modal" class="modal-overlay fixed inset-0 z-[100] bg-surface-bright/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="modal-content w-full max-w-sm bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-lg p-6">
+    <h3 class="font-display-italic text-2xl text-primary mb-4 italic">Add a Balance</h3>
+    <div class="space-y-4 mb-6">
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Name of Balance</label>
+        <input type="text" id="debt-input-name" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. Credit Card">
+      </div>
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Total Amount Owed</label>
+        <input type="number" id="debt-input-amount" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. 15000">
+      </div>
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Already Paid (Optional)</label>
+        <input type="number" id="debt-input-paid" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. 0" value="0">
+      </div>
+    </div>
+    <div class="flex gap-3 justify-end">
+      <button onclick="closeModal('debt-modal')" class="px-5 py-2.5 rounded-full bg-surface-container-high border border-outline-variant/40 font-sub-label text-on-surface-variant hover:bg-outline-variant/20 transition-colors">Cancel</button>
+      <button onclick="submitDebtItem()" class="px-6 py-2.5 rounded-full rose-gold-gradient text-white font-sub-label pearl-gloss shadow-md hover:opacity-95 active:scale-95 transition-transform">Add ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL (Used for Debts & Splurges) -->
+<div id="payment-modal" class="modal-overlay fixed inset-0 z-[120] bg-surface-bright/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="modal-content w-full max-w-sm bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-lg p-6">
+    <h3 class="font-display-italic text-2xl text-primary mb-2 italic" id="payment-modal-title">Log Payment</h3>
+    <p class="font-body-md text-on-surface-variant mb-4" id="payment-modal-desc">How much did you chip away today?</p>
+    <input type="hidden" id="payment-input-id">
+    <input type="hidden" id="payment-input-type">
+    <div class="space-y-4 mb-6">
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Amount</label>
+        <input type="number" id="payment-input-amount" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. 500">
+      </div>
+    </div>
+    <div class="flex gap-3 justify-end">
+      <button onclick="closeModal('payment-modal')" class="px-5 py-2.5 rounded-full bg-surface-container-high border border-outline-variant/40 font-sub-label text-on-surface-variant hover:bg-outline-variant/20 transition-colors">Cancel</button>
+      <button onclick="submitPayment()" class="px-6 py-2.5 rounded-full rose-gold-gradient text-white font-sub-label pearl-gloss shadow-md hover:opacity-95 active:scale-95 transition-transform">Log ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- SPLURGES MODAL -->
+<div id="splurge-modal" class="modal-overlay fixed inset-0 z-[100] bg-surface-bright/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="modal-content w-full max-w-sm bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-lg p-6">
+    <h3 class="font-display-italic text-2xl text-primary mb-4 italic">Set a Fun Goal</h3>
+    <div class="space-y-4 mb-6">
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">What are you saving for?</label>
+        <input type="text" id="splurge-input-name" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. Concert Tickets">
+      </div>
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Target Amount</label>
+        <input type="number" id="splurge-input-amount" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. 8000">
+      </div>
+    </div>
+    <div class="flex gap-3 justify-end">
+      <button onclick="closeModal('splurge-modal')" class="px-5 py-2.5 rounded-full bg-surface-container-high border border-outline-variant/40 font-sub-label text-on-surface-variant hover:bg-outline-variant/20 transition-colors">Cancel</button>
+      <button onclick="submitSplurgeItem()" class="px-6 py-2.5 rounded-full rose-gold-gradient text-white font-sub-label pearl-gloss shadow-md hover:opacity-95 active:scale-95 transition-transform">Add ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXPIRY MODAL -->
+<div id="expiry-modal" class="modal-overlay fixed inset-0 z-[100] bg-surface-bright/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="modal-content w-full max-w-sm bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-lg p-6">
+    <h3 class="font-display-italic text-2xl text-primary mb-4 italic">Add Renewal</h3>
+    <div class="space-y-4 mb-6">
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Item to Renew</label>
+        <input type="text" id="expiry-input-name" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. Passport">
+      </div>
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Expiry Date</label>
+        <input type="date" id="expiry-input-date" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors">
+      </div>
+    </div>
+    <div class="flex gap-3 justify-end">
+      <button onclick="closeModal('expiry-modal')" class="px-5 py-2.5 rounded-full bg-surface-container-high border border-outline-variant/40 font-sub-label text-on-surface-variant hover:bg-outline-variant/20 transition-colors">Cancel</button>
+      <button onclick="submitExpiryItem()" class="px-6 py-2.5 rounded-full rose-gold-gradient text-white font-sub-label pearl-gloss shadow-md hover:opacity-95 active:scale-95 transition-transform">Add ✦</button>
+    </div>
+  </div>
+</div>
+
+<!-- RHYTHM MODAL -->
+<div id="rhythm-modal" class="modal-overlay fixed inset-0 z-[100] bg-surface-bright/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="modal-content w-full max-w-sm bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-lg p-6">
+    <h3 class="font-display-italic text-2xl text-primary mb-4 italic">Add a Nest Rhythm</h3>
+    <div class="space-y-4 mb-6">
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Rhythm Name</label>
+        <input type="text" id="rhythm-input-name" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. Water Plants">
+      </div>
+    </div>
+    <div class="flex gap-3 justify-end">
+      <button onclick="closeModal('rhythm-modal')" class="px-5 py-2.5 rounded-full bg-surface-container-high border border-outline-variant/40 font-sub-label text-on-surface-variant hover:bg-outline-variant/20 transition-colors">Cancel</button>
+      <button onclick="submitRhythmItem()" class="px-6 py-2.5 rounded-full rose-gold-gradient text-white font-sub-label pearl-gloss shadow-md hover:opacity-95 active:scale-95 transition-transform">Add ✦</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').then(registration => {
+        console.log('SW registered: ', registration);
+      }).catch(registrationError => {
+        console.log('SW registration failed: ', registrationError);
+      });
+    });
+  }
+</script>
+</body>
+</html>
