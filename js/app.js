@@ -1196,7 +1196,7 @@ function renderThoughts() {
   if (!container) return;
   container.innerHTML = '';
 
-  thoughts.forEach(t => {
+  thoughts.forEach((t, index) => {
     const card = document.createElement('div');
     card.className = 'bg-[#FDE8E8] p-card-padding rounded-xl border border-[#D4956A]/30 shadow-sm flex flex-col gap-3 min-h-[140px]';
     
@@ -1207,8 +1207,14 @@ function renderThoughts() {
     
     card.innerHTML = `
       <div class="flex items-center justify-between">
-        <span class="text-xl">${t.emoji}</span>
-        <span class="font-cormorant italic text-sub-label text-secondary">${t.date}</span>
+        <div class="flex items-center gap-2">
+          <span class="text-xl">${t.emoji}</span>
+          <span class="font-cormorant italic text-sub-label text-secondary">${t.date}</span>
+        </div>
+        <div class="flex items-center gap-2 opacity-50 hover:opacity-100 transition-opacity">
+          <button onclick="editThought(${index})" class="text-on-surface hover:text-primary active:scale-90 transition-transform"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+          <button onclick="deleteThought(${index})" class="text-on-surface hover:text-[#914540] active:scale-90 transition-transform"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+        </div>
       </div>
       <p class="font-body-md text-on-surface leading-snug">${t.text}</p>
     `;
