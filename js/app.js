@@ -1,3 +1,5 @@
+let editingBillIndex = -1;
+let editingEssentialIndex = -1;
 // ===== HELPER: Local Date String =====
 function getLocalDateString(date) {
   if (!date) date = new Date();
@@ -591,11 +593,17 @@ function submitBillItem() {
     amount: Number(amountInp.value),
     date: dateInp.value.trim() || 'Due Soon',
     category: iconInp.value,
-    paid: false,
+    paid: editingBillIndex > -1 ? bills[editingBillIndex].paid : false,
     recurring: recInp.checked
   };
   
-  bills.push(newBill);
+  if (editingBillIndex > -1) {
+    bills[editingBillIndex] = newBill;
+    editingBillIndex = -1;
+  } else {
+    bills.push(newBill);
+  }
+  
   localStorage.setItem('cm-bills', JSON.stringify(bills));
   
   renderBillsAndSubscriptions();
@@ -985,9 +993,15 @@ function renderBillsAndSubscriptions() {
           <p class="font-sub-label text-sub-label text-on-surface-variant">${item.date}</p>
         </div>
       </div>
-      <div class="text-right">
-        <p class="font-body-lg text-body-lg text-primary">${formatCurrency(item.amount)}</p>
-        ${paidBadge}
+      <div class="flex items-center gap-3">
+        <div class="text-right">
+          <p class="font-body-lg text-body-lg text-primary">${formatCurrency(item.amount)}</p>
+          ${paidBadge}
+        </div>
+        <div class="flex flex-col gap-1 items-center justify-center">
+          <button onclick="editBill(${index})" class="text-on-surface-variant/40 hover:text-primary active:scale-90 transition-transform"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+          <button onclick="deleteBill(${index})" class="text-on-surface-variant/40 hover:text-primary active:scale-90 transition-transform"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+        </div>
       </div>
     `;
     
@@ -1366,10 +1380,13 @@ function renderDebts() {
       card.innerHTML = `
         <div class="flex items-center justify-between mb-2">
           <span class="font-display-italic text-lg text-primary italic">${debt.name}</span>
-          <button onclick="deleteDebt(${debt.id})" class="text-[#914540] active:scale-95 transition-transform"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+          <div class="flex items-center gap-2">
+            <button onclick="editDebt(${debt.id})" class="text-on-surface-variant/40 hover:text-primary active:scale-90 transition-transform"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+            <button onclick="deleteDebt(${debt.id})" class="text-on-surface-variant/40 hover:text-[#914540] active:scale-90 transition-transform"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+          </div>
         </div>
         <div class="flex justify-between font-sub-label text-[10px] text-on-surface-variant mb-1.5 uppercase tracking-wider">
-          <span>${formatCurrency(debt.paid)} paid</span>
+          <span>${formatCurrency(debt.paid)} paid (${formatCurrency(debt.amount - debt.paid)} left)</span>
           <span>${formatCurrency(debt.amount)} total</span>
         </div>
         <div class="w-full bg-surface-container-high rounded-full h-2 mb-3 overflow-hidden">
@@ -1430,10 +1447,13 @@ function renderSplurges() {
       card.innerHTML = `
         <div class="flex items-center justify-between mb-2">
           <span class="font-display-italic text-lg text-primary italic">${splurge.name}</span>
-          <button onclick="deleteSplurge(${splurge.id})" class="text-[#914540] active:scale-95 transition-transform"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+          <div class="flex items-center gap-2">
+            <button onclick="editSplurge(${splurge.id})" class="text-on-surface-variant/40 hover:text-primary active:scale-90 transition-transform"><span class="material-symbols-outlined text-[16px]">edit</span></button>
+            <button onclick="deleteSplurge(${splurge.id})" class="text-on-surface-variant/40 hover:text-[#914540] active:scale-90 transition-transform"><span class="material-symbols-outlined text-[16px]">delete</span></button>
+          </div>
         </div>
         <div class="flex justify-between font-sub-label text-[10px] text-on-surface-variant mb-1.5 uppercase tracking-wider">
-          <span>${formatCurrency(splurge.paid)} saved</span>
+          <span>${formatCurrency(splurge.paid)} saved (${formatCurrency(splurge.amount - splurge.paid)} left)</span>
           <span>${formatCurrency(splurge.amount)} goal</span>
         </div>
         <div class="w-full bg-surface-container-high rounded-full h-2 mb-3 overflow-hidden">
@@ -1739,5 +1759,111 @@ function editExpiry(index) {
     expiries[index].name = newName.trim();
     localStorage.setItem('cm-expiries', JSON.stringify(expiries));
     renderExpiries();
+  }
+}
+
+
+// ===== ADDITIONAL DYNAMIC HELPER FUNCTIONS =====
+function openAddBillModal() {
+  editingBillIndex = -1;
+  document.getElementById('bill-input-name').value = '';
+  document.getElementById('bill-input-amount').value = '';
+  document.getElementById('bill-input-icon').value = 'home';
+  document.getElementById('bill-input-date').value = '';
+  document.getElementById('bill-input-recurring').checked = false;
+  openModal('bill-modal');
+}
+
+function editBill(index) {
+  editingBillIndex = index;
+  const item = bills[index];
+  document.getElementById('bill-input-name').value = item.name;
+  document.getElementById('bill-input-amount').value = item.amount;
+  document.getElementById('bill-input-icon').value = item.category;
+  document.getElementById('bill-input-date').value = item.date === 'Due Soon' ? '' : item.date;
+  document.getElementById('bill-input-recurring').checked = item.recurring;
+  openModal('bill-modal');
+}
+
+function openAddEssentialModal() {
+  editingEssentialIndex = -1;
+  document.getElementById('essential-modal-title').textContent = "Add Essential Item";
+  document.getElementById('essential-modal-btn').textContent = "Add ✦";
+  
+  document.getElementById('essential-input-name').value = '';
+  document.getElementById('essential-input-duration').value = '30';
+  document.getElementById('essential-input-emoji').value = '🧻';
+  
+  openModal('essential-modal');
+}
+
+function submitEssentialItem() {
+  const nameInp = document.getElementById('essential-input-name');
+  const durInp = document.getElementById('essential-input-duration');
+  const emojiInp = document.getElementById('essential-input-emoji');
+  
+  if (!nameInp || nameInp.value.trim() === '') return;
+  
+  const days = parseInt(durInp.value) || 30;
+  
+  const newItem = {
+    name: nameInp.value.trim(),
+    daysDuration: days,
+    emoji: emojiInp.value.trim() || '🧻',
+    icon: 'local_florist',
+    lastReplenished: editingEssentialIndex > -1 ? essentials[editingEssentialIndex].lastReplenished : new Date().toISOString()
+  };
+  
+  if (editingEssentialIndex > -1) {
+    essentials[editingEssentialIndex] = newItem;
+    editingEssentialIndex = -1;
+  } else {
+    essentials.push(newItem);
+  }
+  
+  localStorage.setItem('cm-essentials', JSON.stringify(essentials));
+  renderEssentials();
+  closeModal('essential-modal');
+}
+
+function editEssential(index) {
+  editingEssentialIndex = index;
+  const item = essentials[index];
+  
+  document.getElementById('essential-modal-title').textContent = "Edit Essential Item";
+  document.getElementById('essential-modal-btn').textContent = "Save Changes ✦";
+  
+  document.getElementById('essential-input-name').value = item.name;
+  document.getElementById('essential-input-duration').value = item.daysDuration;
+  document.getElementById('essential-input-emoji').value = item.emoji || '🧻';
+  
+  openModal('essential-modal');
+}
+
+function editDebt(id) {
+  const index = debts.findIndex(d => d.id === id);
+  if (index === -1) return;
+  const item = debts[index];
+  const newName = prompt("Edit Goal Name:", item.name);
+  if (newName !== null && newName.trim() !== '') {
+    const newAmt = prompt("Edit Total Goal Amount:", item.amount);
+    debts[index].name = newName.trim();
+    if (newAmt && !isNaN(newAmt)) debts[index].amount = parseFloat(newAmt);
+    localStorage.setItem('cm-debts', JSON.stringify(debts));
+    renderDebts();
+  }
+}
+
+function editSplurge(id) {
+  const index = splurges.findIndex(s => s.id === id);
+  if (index === -1) return;
+  const item = splurges[index];
+  const newName = prompt("Edit Splurge Name:", item.name);
+  if (newName !== null && newName.trim() !== '') {
+    const newAmt = prompt("Edit Target Amount:", item.amount);
+    splurges[index].name = newName.trim();
+    if (newAmt && !isNaN(newAmt)) splurges[index].amount = parseFloat(newAmt);
+    localStorage.setItem('cm-splurges', JSON.stringify(splurges));
+    renderSplurges();
   }
 }

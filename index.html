@@ -170,7 +170,10 @@ tailwind.config = {
       <div class="absolute -right-8 -bottom-8 opacity-20"><span class="material-symbols-outlined text-[120px]">local_florist</span></div>
     </section>
     <div class="px-container-padding pt-8 pb-10 bg-[#FFF8F5] min-h-screen">
-      <div class="flex items-center gap-2 mb-4"><span class="text-primary text-xs">◆</span><h3 class="font-section-label text-section-label text-primary">Running Out</h3></div>
+      <div class="flex items-center justify-between mb-4">
+    <div class="flex items-center gap-2"><span class="text-primary text-xs">◆</span><h3 class="font-section-label text-section-label text-primary">Running Out</h3></div>
+    <button onclick="openAddEssentialModal()" class="text-primary hover:text-primary-container active:scale-95 transition-transform"><span class="material-symbols-outlined">add_circle</span></button>
+  </div>
       <div id="essentials-container" class="grid gap-stack-gap mb-section-margin">
         <!-- Dynamic Essentials Rendered Here -->
       </div>
@@ -241,7 +244,7 @@ tailwind.config = {
       </div>
       <div id="expiries-container" class="grid gap-stack-gap mb-section-margin"></div>
 
-      <button onclick="openModal('bill-modal')" class="w-full rose-gold-gradient text-white py-5 rounded-full font-body-lg pearl-gloss shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2"><span class="material-symbols-outlined">add</span>Add bill or sub</button>
+      <button onclick="openAddBillModal()" class="w-full rose-gold-gradient text-white py-5 rounded-full font-body-lg pearl-gloss shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2"><span class="material-symbols-outlined">add</span>Add bill or sub</button>
     </div>
   </section>
 
@@ -410,7 +413,7 @@ tailwind.config = {
     <span class="text-primary text-[10px]">◆</span>
     <span class="font-display-italic text-[18px] text-on-surface">Grocery item</span>
   </div>
-  <div class="fab-item flex items-center gap-3 bg-surface-container-lowest border border-[#D4956A] px-6 py-3 rounded-full shadow-[0_4px_15px_rgba(212,149,106,0.15)] cursor-pointer" onclick="closeFab(); openModal('bill-modal')">
+  <div class="fab-item flex items-center gap-3 bg-surface-container-lowest border border-[#D4956A] px-6 py-3 rounded-full shadow-[0_4px_15px_rgba(212,149,106,0.15)] cursor-pointer" onclick="closeFab(); openAddBillModal()">
     <span class="text-primary text-[10px]">◆</span>
     <span class="font-display-italic text-[18px] text-on-surface">Bill</span>
   </div>
@@ -584,6 +587,32 @@ tailwind.config = {
     <div class="flex gap-3 justify-end">
       <button onclick="closeModal('price-modal')" class="px-5 py-2.5 rounded-full bg-surface-container-high border border-outline-variant/40 font-sub-label text-on-surface-variant hover:bg-outline-variant/20 transition-colors">Cancel</button>
       <button onclick="submitGroceryPrice()" class="px-6 py-2.5 rounded-full rose-gold-gradient text-white font-sub-label pearl-gloss shadow-md hover:opacity-95 active:scale-95 transition-transform">Save ✦</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ESSENTIAL FORM MODAL -->
+<div id="essential-modal" class="modal-overlay fixed inset-0 z-[100] bg-surface-bright/50 backdrop-blur-sm flex items-center justify-center p-4">
+  <div class="modal-content w-full max-w-sm bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-[0_15px_40px_rgba(212,149,106,0.12)] p-6">
+    <h3 class="font-display-italic text-2xl text-primary mb-4 italic" id="essential-modal-title">Add Essential Item</h3>
+    <div class="space-y-4 mb-6">
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Item Name</label>
+        <input type="text" id="essential-input-name" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. Toilet Paper">
+      </div>
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Duration (Days it lasts)</label>
+        <input type="number" id="essential-input-duration" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. 30" value="30">
+      </div>
+      <div>
+        <label class="block font-sub-label text-[10px] uppercase tracking-wider text-on-surface-variant mb-2">Emoji/Icon (Optional)</label>
+        <input type="text" id="essential-input-emoji" class="w-full bg-surface-container-high border border-outline-variant/40 rounded-xl px-4 py-3 font-body-md text-on-surface focus:outline-none focus:border-primary transition-colors" placeholder="e.g. 🧻" value="🧻">
+      </div>
+    </div>
+    <div class="flex gap-3 justify-end">
+      <button onclick="closeModal('essential-modal')" class="px-5 py-2.5 rounded-full bg-surface-container-high border border-outline-variant/40 font-sub-label text-on-surface-variant hover:bg-outline-variant/20 transition-colors">Cancel</button>
+      <button onclick="submitEssentialItem()" class="px-6 py-2.5 rounded-full rose-gold-gradient text-white font-sub-label pearl-gloss shadow-md hover:opacity-95 active:scale-95 transition-transform" id="essential-modal-btn">Add ✦</button>
     </div>
   </div>
 </div>
